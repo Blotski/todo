@@ -1,4 +1,4 @@
-// import { useState } from 'react'
+// re-render only individual items
 
 import { useState } from 'react'
 import './App.css'
@@ -6,35 +6,33 @@ import './App.css'
 // todo main  - > todo filtration + todo crud 
 // todo auth 
 
-const passwordInDb = 'xyz';
-const emailInDb = 'a@g.com';
-
 type Props = {
   todo: TodoItem,
   i: number,
   handleDeleteToDoItem: (i: number) => void,
   handleEdit: (i: number) => void,
-  handleComplete: (i: number) => void,
-  
+  handleComplete?: (i: number) => void,
+  filter: filter,
 }
 
-type TodoItem = {
-  name: string,
-  completed: boolean
-}
+type TodoItem = string;
 
 type filter = 'all' | 'completed' | 'active';
 
-function App() {
+type TodoT = (p: Props) => React.ReactElement;
+
+const passwordInDb = 'x';
+const emailInDb = 'a@g';
+
+
+function App1(): React.ReactElement { 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [ loggedIn, setLoggedIn ] = useState(true);
-  const [ newItem, setNewItem ] = useState<TodoItem >({name: '', completed: false});
+  const [ newItem, setNewItem ] = useState<TodoItem >('');
   const [ todoItems, setTodoItems ] = useState<TodoItem[]>([])
   const [ filter, setFilter ] = useState<filter>('all')
 
-
-  // console.log('email + pass- ' + email + ' ' + password);
   const handleSubmit = () => {
     console.log('Login data submitted' + email + password);
     if (email === emailInDb && password === passwordInDb) {
@@ -46,25 +44,20 @@ function App() {
     setLoggedIn(false);
   }
 
-  const handleAddToDoItem = () => {
-    if (!newItem.name) return;
+  const handleAddToDoItem = (): void => {
+    if (!newItem) return;
+    // newItem.index = todoItems.length;
     setTodoItems([...todoItems, newItem ])
-    setNewItem({name: '', completed: false});
+    setNewItem('');
   }
   const handleDeleteToDoItem = (i: number): void => {
     setTodoItems([...todoItems.slice(0, i), ...todoItems.slice(i+1)])
-    setNewItem({name: '', completed: false});
+    setNewItem('');
   }
 
-  const handleEdit = (itemIndex: number) => {
+  const handleEdit = (itemIndex: number): void => {
     setNewItem(todoItems[itemIndex]);
     setTodoItems([...todoItems.slice(0, itemIndex), ...todoItems.slice(itemIndex+1)])
-  }
-
-  const handleComplete = (itemIndex: number): void => {
-    const currItem = todoItems[itemIndex];
-    currItem.completed = currItem.completed ? false : true;
-    setTodoItems([...todoItems.slice(0, itemIndex), currItem, ...todoItems.slice(itemIndex+1)])
   }
 
   return (
@@ -89,13 +82,10 @@ function App() {
       loggedIn &&
       <div>
         <div>
-          <h1>TODO APP</h1>
+          <h1>TODO APP1</h1>
         </div>
         <div className='form'>
           <div className='controls'>
-            {/* <button onClick={handleAddToDoItem}> Add</button>  */}
-            {/* <button>Delete</button> */}
-            {/* <button>Edit</button> */}
           </div>
         <div className='tasks'>
 
@@ -108,26 +98,24 @@ function App() {
         <div className='add-task'>
           <label htmlFor="new-task">
             Enter task name:
-            <input type="text" value={newItem?.name} onChange={(e) => setNewItem({name: e.target.value, completed: false})}/>
+            <input type="text" value={newItem} onChange={(e) => setNewItem(e.target.value)}/>
           </label>
           <button onClick={handleAddToDoItem}> Add</button> 
-          {/* <button >Submit</button> */}
+
         </div>
         <hr />
-          {/* <TodoItem /> */}
 
           {
-            todoItems.filter(item => {
-              if (filter === 'all') return item;
-              if (filter === 'completed' && item.completed === true) return item;
-              if (filter === 'active' && item.completed !== true) return item;
-            } ).map((item: TodoItem, i: number) =>  <Todo
+            todoItems.map((item, index) =>  {
+              console.log('item- ', item)
+            return <Todo
+            key={index + item}
             todo={item} 
-            i={i} 
+            i={index} 
             handleDeleteToDoItem={handleDeleteToDoItem}
             handleEdit={handleEdit}
-            handleComplete={handleComplete}
-            />)
+            filter={filter}
+            />})
 
           }
 
@@ -142,20 +130,22 @@ function App() {
 }
 
 
-const Todo = ({todo, i, handleDeleteToDoItem, handleEdit, handleComplete}: Props) => {
-  // const [isChecked, setIsChecked ] = useState(false);
-  // const [ completed, setCompleted ] = useState(false);
 
-  console.log(todo)
+
+const Todo: TodoT = ({todo, i, handleDeleteToDoItem, handleEdit, filter}: Props) => {
+  const [ isCompleted, setIsCompleted ] = useState(false)
+
+
+  if (filter === 'all') {
+    console.log('filter === all')
+  } else if ( filter === 'completed' && !isCompleted  ||   filter === 'active' && isCompleted  ) {
+    return <></>
+  }
 
   return (
-    <div key={i + todo.name} className='item' >
-      {/* <label htmlFor={todo} onClick={() => setIsChecked(isChecked ? false : true)}>
-            <input type="checkbox" id={todo} checked={isChecked}/>
-            {todo}
-          </label> */}
-            <p>{todo.name}</p>
-            <input type="checkbox" checked={todo.completed} onClick={() => handleComplete(i)}/>
+    <div className='item' >
+            <p>{todo + ' index is ' + i}</p>
+            <input type="checkbox" checked={isCompleted} onChange={() => setIsCompleted(isCompleted ? false : true)}/>
           {' '}
       <button onClick={() => handleDeleteToDoItem(i )}>Delete</button>
       {' '}
@@ -165,4 +155,4 @@ const Todo = ({todo, i, handleDeleteToDoItem, handleEdit, handleComplete}: Props
   )
 }
 
-export default App
+export default App1
