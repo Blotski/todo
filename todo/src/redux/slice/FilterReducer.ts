@@ -1,9 +1,6 @@
 import {createSlice } from '@reduxjs/toolkit';
-import type { filter } from '../../AppWithRedux'
+import type { stateT } from '../ReduxTypes';
 
-type stateT = {
-  value: filter
-}
 const initialState: stateT = {
   value: 'all'
 }
@@ -12,9 +9,9 @@ const filterSlice = createSlice({
   name: 'filter',
   initialState,
   reducers: {
-    update: (state, action) => { state.value = action.payload} // update is an action creator
+    update: (state, action) => { state.value = action.payload} 
   }
 })
-// console.log('filterSlice- ', filterSlice)
+
 export default filterSlice.reducer;
 export const { update } = filterSlice.actions;

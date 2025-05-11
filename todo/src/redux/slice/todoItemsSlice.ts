@@ -1,9 +1,6 @@
 import {createSlice } from '@reduxjs/toolkit';
-import type { TodoItem } from '../../AppWithRedux';
+import type { InitialState } from '../ReduxTypes';
 
-type InitialState = {
-  value: TodoItem[]
-}
 
 const initialState: InitialState = {
   value: []

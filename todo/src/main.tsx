@@ -10,7 +10,6 @@ import AppReduxByComponent from './AppReduxByComponent-v4.tsx'
 
 createRoot(document.getElementById('root')!).render(
     <Provider store={store} >
-
     <AppReduxByComponent />
     </Provider>
 )
