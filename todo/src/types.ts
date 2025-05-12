@@ -12,8 +12,17 @@ export interface TodoProps {
   filter: filter,
 }
 
+export interface jsonPlaceholderI {
+  title: string;
+}
+export interface InitialStateI {
+  value: null | [],
+  status: null | 'pending' | 'fullfiled' | 'rejected'
+}
+
 export type filter = 'all' | 'completed' | 'active';
 
-export type TodoT = (p: TodoProps) => React.ReactElement;
-export type AboutPageT = (p: AuthProps) => React.ReactElement;
+
+export type TodoT = (p: TodoProps) => React.ReactElement; 
+export type AboutPageT = (p: AuthProps) => React.ReactElement; 
 export type GenericReact = () => React.ReactElement;

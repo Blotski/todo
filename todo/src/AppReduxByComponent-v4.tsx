@@ -1,11 +1,12 @@
 import './App.css'
 
-import { useState } from 'react'
+import {  useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import {update} from './redux/slice/FilterReducer.ts'
+import {update} from './redux/slice/FilterSlice.ts'
 import { addItem, removeItem } from './redux/slice/todoItemsSlice.ts';
+import { fetchJsonPlaceholder, clean } from './redux/slice/jsonPlaceholderSlice.ts';
 
-import type { AuthProps, TodoProps, TodoT, AboutPageT, GenericReact } from './types.ts';
+import type { AuthProps, TodoProps, TodoT, AboutPageT, GenericReact, jsonPlaceholderI } from './types.ts';
 import type { RootState, AppDispatch } from './redux/store.ts';
 
 const passwordInDb = 'a';
@@ -27,6 +28,10 @@ const AppReduxByComponent: GenericReact = () => {
 const AuthPage: AboutPageT = ({loggedIn, setLoggedIn}: AuthProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const dispatch: AppDispatch = useDispatch();
+  const data = useSelector((state: RootState) => state.fetchPlaceholder.value)
+
 
   const handleSubmit = () => {
     if (email === emailInDb && password === passwordInDb) {
@@ -54,7 +59,16 @@ const AuthPage: AboutPageT = ({loggedIn, setLoggedIn}: AuthProps) => {
         <input onChange={(e) => setPassword(e.target.value)}  type="password" id="password" />
         <label htmlFor="password">Password</label>
         <button onClick={handleSubmit}>Submit</button>
+        <hr/>
+        <div>
+          <h1>Redux Thunk</h1>
+
+          {!data && <button onClick={() => dispatch(fetchJsonPlaceholder())}>click to load async</button>}
+          {data && <button onClick={() => dispatch(clean())} >hide</button> }
+          {data && data.map((x: jsonPlaceholderI )=> <p>{x.title}</p>) }
+        </div>
       </div>
+
     }
     </div>
   )
