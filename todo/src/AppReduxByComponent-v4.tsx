@@ -3,7 +3,7 @@ import './App.css'
 import {  useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import {update} from './redux/slice/FilterSlice.ts'
-import { addItem, removeItem } from './redux/slice/todoItemsSlice.ts';
+import { addItem, removeItem, changeComplted } from './redux/slice/todoItemsSlice.ts';
 import { fetchJsonPlaceholder, clean } from './redux/slice/jsonPlaceholderSlice.ts';
 
 import type { AuthProps, TodoProps, TodoT, AboutPageT, GenericReact, jsonPlaceholderI } from './types.ts';
@@ -94,7 +94,7 @@ const Tasks: GenericReact = () => {
   }
 
   const handleEdit = (itemIndex: number): void => {
-    setNewItem(todoItmesR[itemIndex]);
+    setNewItem(todoItmesR[itemIndex].name);
     dispatch(removeItem(itemIndex))
   }
 
@@ -106,9 +106,9 @@ const Tasks: GenericReact = () => {
           <div className='tasks'>
 
             <div className="filter">
-              <button className="show-completed" onClick={() => dispatch(update('completed'))}>Show completed</button>
-              <button className="show-active" onClick={() => dispatch(update('active'))}>Show active</button>
-              <button className="show-all" onClick={() => dispatch(update('all'))}>Show all</button>
+              <button className={["show-completed", filter === 'completed' && 'active'].filter(Boolean).join(' ')} onClick={() => dispatch(update('completed'))}>Show completed</button>
+              <button className={["show-active", filter === 'active' && 'active'].filter(Boolean).join(' ')} onClick={() => dispatch(update('active'))}>Show active</button>
+              <button className={["show-all", filter === 'all' && 'active'].filter(Boolean).join(' ')} onClick={() => dispatch(update('all'))}>Show all</button>
             </div>
             <hr />
           <div className='add-task'>
@@ -124,7 +124,7 @@ const Tasks: GenericReact = () => {
             {
               todoItmesR.map((item, index) =>  {
               return <Todo
-              key={index + item}
+              key={index + item.name}
               todo={item} 
               i={index} 
               handleDeleteToDoItem={handleDeleteToDoItem}
@@ -139,18 +139,18 @@ const Tasks: GenericReact = () => {
 }
 
 const Todo: TodoT = ({todo, i, handleDeleteToDoItem, handleEdit, filter}: TodoProps) => {
-  const [ isCompleted, setIsCompleted ] = useState(false)
+  const dispatch: AppDispatch = useDispatch();
 
   if (filter === 'all') {
     // console.log('filter === all')
-  } else if ( filter === 'completed' && !isCompleted  ||   filter === 'active' && isCompleted  ) {
+  } else if ( filter === 'completed' && !todo.isCompleted  ||   filter === 'active' && todo.isCompleted  ) {
     return <></>
   }
 
   return (
     <div className='item' >
-            <p>{todo + ' index is ' + i}</p>
-            <input type="checkbox" checked={isCompleted} onChange={() => setIsCompleted(isCompleted ? false : true)}/>
+            <p>{todo.name + ' index is ' + i}</p>
+            <input type="checkbox" checked={todo.isCompleted} onChange={() => dispatch(changeComplted(i))}/>
           {' '}
       <button onClick={() => handleDeleteToDoItem(i )}>Delete</button>
       {' '}

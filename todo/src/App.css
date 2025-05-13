@@ -45,3 +45,10 @@ h1{
 hr {
   margin: 20px;
 }
+
+.active {
+  background-color: lightgray;
+  /* color: white; */
+  border: 1px solid black;
+  border-radius: 3px;
+}

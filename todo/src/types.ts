@@ -1,10 +1,12 @@
+import type { TodoItemI } from "./redux/ReduxTypes";
+
 export interface AuthProps {
   loggedIn: boolean,
   setLoggedIn: (a: boolean) => void,
 }
 
 export interface TodoProps {
-  todo: string,
+  todo: TodoItemI,
   i: number,
   handleDeleteToDoItem: (i: number) => void,
   handleEdit: (i: number) => void,
@@ -13,14 +15,17 @@ export interface TodoProps {
 }
 
 export interface jsonPlaceholderI {
+  userId: number;
+  id: number;
   title: string;
+  body: string;
 }
 export interface InitialStateI {
-  value: null | [],
+  value: null | jsonPlaceholderI[],
   status: null | 'pending' | 'fullfiled' | 'rejected'
 }
 
-export type filter = 'all' | 'completed' | 'active';
+export type filter = 'all' | 'completed' | 'active' | null;
 
 
 export type TodoT = (p: TodoProps) => React.ReactElement; 
