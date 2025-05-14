@@ -1,5 +1,5 @@
 import {createSlice } from '@reduxjs/toolkit';
-import type { InitialState } from '../ReduxTypes';
+import type { InitialState } from '../../types';
 
 
 const initialState: InitialState = {
@@ -16,7 +16,6 @@ const todoItemsSlice = createSlice({
     },
     changeComplted: (state, action) => {
       const i = action.payload;
-      console.log('todoItemSlice / changeComplted / index- ', i)
       state.value[i].isCompleted = (state.value[i].isCompleted ? false : true)
     }
   }

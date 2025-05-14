@@ -14,10 +14,6 @@ import {
   REGISTER,
  } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
- 
-// check if store exists in localStorage
-  // if yes: get it from ls
-  // if no: create and add to ls
 
 const rootReducer = combineReducers({
     filter: filterReducer,
@@ -30,14 +26,6 @@ const persistConfig = {
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
-
-// const store =  configureStore({
-//   reducer: {
-    // filter: filterReducer,
-    // todoItems: todoItemReducer,
-    // fetchPlaceholder: jsonPlaceholderReducer,
-//   }
-// })
 
 const store = configureStore({
   reducer: persistedReducer,

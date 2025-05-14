@@ -1,7 +1,7 @@
 import {createSlice } from '@reduxjs/toolkit';
-import type { stateT } from '../ReduxTypes';
+import type { stateI } from '../../types';
 
-const initialState: stateT = {
+const initialState: stateI = {
   value: 'all'
 }
 

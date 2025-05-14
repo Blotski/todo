@@ -1,4 +1,3 @@
-import type { TodoItemI } from "./redux/ReduxTypes";
 
 export interface AuthProps {
   loggedIn: boolean,
@@ -28,6 +27,19 @@ export interface InitialStateI {
 export type filter = 'all' | 'completed' | 'active' | null;
 
 
-export type TodoT = (p: TodoProps) => React.ReactElement; 
+export type TodoT = (p: TodoProps) => React.ReactElement | null; 
 export type AboutPageT = (p: AuthProps) => React.ReactElement; 
 export type GenericReact = () => React.ReactElement;
+
+export interface TodoItemI {
+  name: string, 
+  isCompleted: boolean
+}
+
+export interface stateI {
+  value: filter
+}
+
+export interface InitialState {
+  value: TodoItemI[]
+}

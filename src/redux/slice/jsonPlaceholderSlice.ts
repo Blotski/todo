@@ -3,12 +3,10 @@ import type { InitialStateI, jsonPlaceholderI } from "../../types";
 
 const API = `https://jsonplaceholder.typicode.com/posts`;
 
-
-
-// const initialState: InitialStateI = {
-//   value: null,
-//   status: null
-// }
+const initialState: InitialStateI = {
+  value: null,
+  status: null
+}
 
 
 export const fetchJsonPlaceholder = createAsyncThunk<jsonPlaceholderI[]>('app/fetchJsonPlaceholder', async () => {
@@ -32,11 +30,7 @@ export const fetchJsonPlaceholder = createAsyncThunk<jsonPlaceholderI[]>('app/fe
 
 const jsonPlaceholderSlice = createSlice({
   name: 'jsonPlaceholder',
-  initialState: {
-    value: null,
-    status: null,
-  } as InitialStateI,
-  // initialState,
+  initialState,
   reducers: {
     clean: (state) => {state.value = null}
    },
